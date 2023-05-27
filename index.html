@@ -2,69 +2,206 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trabalho final</title>
-    <link href="./bootstrap.min.css " rel="stylesheet">
-    <link href="./index.css " rel="stylesheet">
-    <link rel="shortcut icon" href="./350px-complete-edge-coloring-svg.png" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trabalho final</title>
+  <link href="./bootstrap.min.css " rel="stylesheet">
+  <link href="./bootstrap-icons.css" rel="stylesheet">
+  <link href="./index.css " rel="stylesheet">
+  <link rel="shortcut icon" href="./350px-complete-edge-coloring-svg.png" type="image/x-icon">
 </head>
 
 <body>
-    <div class="container pb-5">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbar-collapse">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="index.html">Link</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </div>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <p>Informe os vertices para gerar o grafo</p>
-                <form  id="form_add_vertex">
-                    <div class="form-group">
-                        <label for="input-001">Nó de origem</label>
-                        <input id="input-001" class="form-control" type="number" required placeholder="Ex.: 1" name="node-origin">
-                    </div>
-                    <div class="form-group">
-                        <label for="input-002">Nó de destino</label>
-                        <input id="input-002" class="form-control" type="number" required placeholder="Ex.: 5" name="node-destiny">
-                    </div>
-                    <div class="form-group">
-                        <label for="input-003">Peso do vertice</label>
-                        <input id="input-003" class="form-control" type="number" required placeholder="Ex.: 4" name="vertex-weight">
-                    </div>
-                    <div class="form-buttons">
-                        <div class="form-group">
-                            <button class="btn btn-success w-100" type="submit">Adicionar vertice</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+  <div class="container pb-5">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-collapse"
+          aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Link</a>
+            </li>
+          </ul>
         </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-3">
+        <div class="list-group list-group-flush">
+          <button class="list-group-item" type="button" data-bs-toggle="collapse" data-bs-target="#add_vertex"
+            aria-expanded="true" aria-controls="add_vertex">
+            Vertices
+          </button>
+          <button class="list-group-item" type="button" data-bs-toggle="collapse" data-bs-target="#add_trunk"
+            aria-expanded="false" aria-controls="add_trunk">
+            Baús
+          </button>
+          <button class="list-group-item" type="button" data-bs-toggle="collapse" data-bs-target="#add_delivery"
+            aria-expanded="false" aria-controls="add_delivery">
+            Entregas
+          </button>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="tab-pane" id="collapse-forms">
+          <div class="tab collapse show" data-bs-parent="#collapse-forms" id="add_vertex">
+            <p>Informe os vertices para gerar o grafo</p>
+            <form id="form_add_vertex">
+              <div class="form-group">
+                <label for="input-001">Nó de origem</label>
+                <input id="input-001" class="form-control" type="text" required placeholder="Ex.: 1" name="node-origin">
+              </div>
+              <div class="form-group">
+                <label for="input-002">Nó de destino</label>
+                <input id="input-002" class="form-control" type="text" required placeholder="Ex.: 5"
+                  name="node-destiny">
+              </div>
+              <div class="form-group">
+                <label for="input-003">Peso do vertice</label>
+                <input id="input-003" class="form-control" type="text" required placeholder="Ex.: 4"
+                  name="vertex-weight">
+              </div>
+              <div class="form-buttons">
+                <div class="form-group">
+                  <button class="btn btn-success w-100" type="submit">Adicionar vertice</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="tab collapse" data-bs-parent="#collapse-forms" id="add_trunk">
+            <p>Informações do baú</p>
+            <form class="mb-5" id="form_add_trunk">
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="input-004">Capacidade</label>
+                    <input id="input-004" class="form-control" type="text" required placeholder="100 kg"
+                      name="capacity">
+                  </div>
+                </div>
+                <div class="col-12">
+                  <span>Dimensões</span>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label for="input-005">Altura</label>
+                    <input id="input-005" class="form-control" type="text" required placeholder="10cm" name="height">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label for="input-006">Largura</label>
+                    <input id="input-006" class="form-control" type="text" required placeholder="15cm" name="width">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label for="input-007">Compriento</label>
+                    <input id="input-007" class="form-control" type="text" required placeholder="100cm" name="depth">
+                  </div>
+                </div>
+              </div>
+              <div class="form-buttons">
+                <div class="form-group">
+                  <button class="btn btn-success w-100" type="submit">Adicionar Baú</button>
+                </div>
+              </div>
+            </form>
+            <div id="list_trunk">
+              <ul class="list-group text-center">
+                <li class="list-group-item">
+                  <div class="row">
+                    <div class="col-2">Capacidade</div>
+                    <div class="col-2">Altura</div>
+                    <div class="col-2">Largura</div>
+                    <div class="col-2">Comprimento</div>
+                    <div class="col-2">Volume</div>
+                    <div class="col-2">Excluir</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="tab collapse" data-bs-parent="#collapse-forms" id="add_delivery">
+            <p>Informações da entrega</p>
+            <form class="mb-5" id="form_add_trunk">
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-group select-origin">
+                    <label for="input-008">Origem</label>
+                    <select name="origin" class="form-control py-0" id="input-008">
+                      <option value="" disabled selected>Selecione o vértice de origem</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group select-origin">
+                    <label for="input-008">Destino</label>
+                    <select name="destiny" class="form-control py-0" id="input-008">
+                      <option value="" disabled selected>Selecione o vértice de destino</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <span>Mercadorias</span>
+                  <div class="">
+                    <ul class="list-group">
+                      <li class="list-group-item">
+                        <div class="row justify-content-between">
+                          <div class="col-2">Peso</div>
+                          <div class="col-2">Altura</div>
+                          <div class="col-2">Largura</div>
+                          <div class="col-2">Comprimento</div>
+                          <div class="col-2 text-end"> 
+                            <button id="new-merchandise" type="button" class="btn px-2 py-0 mb-1 btn-secondary">
+                              <i class="bi bi-plus"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="form-buttons">
+                  <div class="form-group">
+                    <button class="btn btn-success w-100" type="submit">Adicionar Baú</button>
+                  </div>
+                </div>
+            </form>
+            <div id="list_trunk">
+              <ul class="list-group text-center">
+                <li class="list-group-item">
+                  <div class="row">
+                    <div class="col-2">Capacidade</div>
+                    <div class="col-2">Altura</div>
+                    <div class="col-2">Largura</div>
+                    <div class="col-2">Comprimento</div>
+                    <div class="col-2">Volume</div>
+                    <div class="col-2">Excluir</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
 
-    <script src="./bootstrap.bundle.min.js"></script>
-    <script src="./jquery-3.7.0.min.js"></script>
-    <script src="./index.js"></script>
+  <script src="./bootstrap.bundle.min.js"></script>
+  <script src="./jquery-3.7.0.min.js"></script>
+  <script src="./index.js"></script>
 </body>
 
 </html>
