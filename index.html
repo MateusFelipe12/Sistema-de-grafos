@@ -56,7 +56,7 @@
         <div class="tab-pane" id="collapse-forms">
           <div class="tab collapse show" data-bs-parent="#collapse-forms" id="add_vertex">
             <p>Informe os vertices para gerar o grafo</p>
-            <form id="form_add_vertex">
+            <form class="mb-5" id="form_add_vertex">
               <div class="form-group">
                 <label for="input-001">Nó de origem</label>
                 <input id="input-001" class="form-control" type="text" required placeholder="Ex.: 1" name="node-origin">
@@ -77,6 +77,9 @@
                 </div>
               </div>
             </form>
+            <div id="list_vertex">
+              <div class="text-center" >Adicione um vertice para iniciar</div>
+            </div>
           </div>
           <div class="tab collapse" data-bs-parent="#collapse-forms" id="add_trunk">
             <p>Informações do baú</p>
@@ -134,7 +137,7 @@
           </div>
           <div class="tab collapse" data-bs-parent="#collapse-forms" id="add_delivery">
             <p>Informações da entrega</p>
-            <form class="mb-5" id="form_add_trunk">
+            <form class="mb-5" id="form_add_delivery">
               <div class="row">
                 <div class="col-12">
                   <div class="form-group select-origin">
@@ -153,44 +156,36 @@
                   </div>
                 </div>
                 <div class="col-12">
-                  <span>Mercadorias</span>
-                  <div class="">
-                    <ul class="list-group">
-                      <li class="list-group-item">
-                        <div class="row justify-content-between">
-                          <div class="col-2">Peso</div>
-                          <div class="col-2">Altura</div>
-                          <div class="col-2">Largura</div>
-                          <div class="col-2">Comprimento</div>
-                          <div class="col-2 text-end"> 
-                            <button id="new-merchandise" type="button" class="btn px-2 py-0 mb-1 btn-secondary">
-                              <i class="bi bi-plus"></i>
-                            </button>
+                  <div class="form-group">
+                    <span>Mercadorias</span>
+                    <div id="list-merchandise">
+                      <ul class="list-group">
+                        <li class="list-group-item head">
+                          <div class="row justify-content-between">
+                            <div class="col-2">Peso</div>
+                            <div class="col-2">Altura</div>
+                            <div class="col-2">Largura</div>
+                            <div class="col-2">Comprimento</div>
+                            <div class="col-2 text-end"> 
+                              <button id="new-merchandise" title="Adicionar mercadoria" type="button" class="btn px-2 py-0 mb-1 btn-secondary">
+                                <i class="bi bi-plus"></i>
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      </li>
-                    </ul>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
                 <div class="form-buttons">
                   <div class="form-group">
-                    <button class="btn btn-success w-100" type="submit">Adicionar Baú</button>
+                    <button class="btn btn-success w-100" type="submit">Adicionar Entrega</button>
                   </div>
                 </div>
+              </div>
             </form>
-            <div id="list_trunk">
-              <ul class="list-group text-center">
-                <li class="list-group-item">
-                  <div class="row">
-                    <div class="col-2">Capacidade</div>
-                    <div class="col-2">Altura</div>
-                    <div class="col-2">Largura</div>
-                    <div class="col-2">Comprimento</div>
-                    <div class="col-2">Volume</div>
-                    <div class="col-2">Excluir</div>
-                  </div>
-                </li>
-              </ul>
+            <div id="list_delivery">
+              Adicione entregas para visualiza-las
             </div>
           </div>
         </div>

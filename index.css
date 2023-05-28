@@ -1,4 +1,4 @@
-
+/* PADRAO DA SCROLLBAR */
 ::-webkit-scrollbar {
     width: 5px;
 }
@@ -12,10 +12,12 @@
     border: 3px solid orange;
 }
 
+/* ESPAÇAMENTO DE GRUPOS DO FORMULÁRIO */
 .form-group{
     margin-bottom: 10px;
 }
 
+/* PADRÃO DOS INPUTS */
 .form-control{
     border-radius: 5px;
     border: 1px solid rgb(33, 150, 243);
@@ -29,22 +31,39 @@
     }
 }
 
+/* DIRECIONA AO INPUT */
 label{
     cursor: pointer;
 }
 
-.form-control::-webkit-outer-spin-button,
-.form-control::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-}   
-
-
-
+/* PADRÃO DOS BOTÕES */
 .btn{
     border-radius: 3px;
 }
 
+/* UI MELHOR */
 .list-group-item[aria-expanded="true"] {
     box-shadow: 0 0 2px 1px rgba(33, 150, 243, 0.5);
     background-color: #e7eaff;
+}
+
+/* DANDO MINIMO TAMANHO A TABLE */
+#list_vertex{
+    width: fit-content;
+}
+
+/* ESTILO DAS TDS DA TABELA */
+#list_vertex td, #list_vertex th{
+    padding: 5px 0;
+    border: solid 1px #707070;
+    min-width: clamp( 30px, 5vw, 55px);
+}
+
+td[has]{
+    cursor: pointer;
+}
+
+/* ESPAÇO ABAIXO */
+body{
+    padding-bottom: 100px;
 }
