@@ -433,23 +433,22 @@ const deleteMerchandise = () => {
 
 function dijkstra(graph, source) {
     const distances = {};
+    const paths = {};
     const visited = {};
     const queue = [];
 
     const numVertices = graph.length;
-
     for (let vertex = 0; vertex < numVertices; vertex++) {
         distances[vertex] = Infinity;
+        paths[vertex] = [];
     }
 
     distances[source] = 0;
-
     queue.push({ vertex: source, distance: 0 });
 
     while (queue.length > 0) {
         queue.sort((a, b) => a.distance - b.distance);
         const { vertex, distance } = queue.shift();
-
         if (visited[vertex]) {
             continue;
         }
@@ -463,62 +462,17 @@ function dijkstra(graph, source) {
 
                 if (newDistance < distances[neighbor]) {
                     distances[neighbor] = newDistance;
+                    console.log(neighbor)
+                    paths[neighbor] = paths[vertex].concat(neighbor);
                     queue.push({ vertex: neighbor, distance: newDistance });
                 }
             }
         }
     }
 
-    return distances;
+    return paths;
 }
 
-function dijkstra2(graph, source) {
-    const distances = {};
-    const paths = {};
-    const visited = {};
-    const queue = [];
-    
-    // vai retornar os nodes sem repetir e medir o tamanho correto
-    const numVertices = getNodesGraph().length;
-    // zerando tudo   
-    for (let vertex = 0; vertex < numVertices; vertex++) {
-      distances[vertex] = Infinity;
-      paths[vertex] = "";
-    }
-    
-    // ir do node 0 ao 0 o peso é 0
-    distances[source] = 0;
-    
-    // ja salva na lista
-    queue.push({ vertex: source, distance: 0 });
-  
-    while (queue.length > 0) {
-      queue.sort((a, b) => a.distance - b.distance);
-      const { vertex, distance } = queue.shift();
-        
-      if (visited[vertex]) {
-        continue;
-      }
-  
-      visited[vertex] = true;
-  
-      for (let neighbor = 0; neighbor < numVertices; neighbor++) {
-        const weight = graph[vertex][neighbor];
-        if (weight > 0) {
-            const newDistance = Number(distance) + Number(weight);
-            
-          if (newDistance < distances[neighbor]) {
-            distances[neighbor] = newDistance;
-            paths[neighbor] = paths[vertex] !== "" ? paths[vertex] + "_" + neighbor.toString() : vertex.toString();
-            queue.push({ vertex: neighbor, distance: newDistance });
-          }
-        }
-      }
-    }
-  
-    return [paths,distances];
-  }
-  
 
 const onload = function () {
     addVertex();
