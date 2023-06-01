@@ -25,6 +25,16 @@ const clearStorage = (item) => {
     localStorage.removeItem(item)
 }
 
+const uxCollapse = () => {
+    $('.list-group-item[data-bs-target]').click((e) => {
+        window.location.hash = $(e.target).attr('data-bs-target');
+    })
+
+    if (window.location.hash) {
+        $('[data-bs-target="' + window.location.hash + '"]:not([aria-expanded="true"])').click()
+    }
+}
+
 const getNodesGraph = function () {
     getItemStorage('vertex');
     let allNodes = [];
@@ -291,8 +301,9 @@ const addDelivery = () => {
 
 const listDelivery = () => {
     let list = $('#list_delivery');
-
     getItemStorage('delivery')
+    getItemStorage('vertex')
+
     let html = ''
     let weight = 0;
     let height = 0;
@@ -326,9 +337,10 @@ const listDelivery = () => {
                     volumetry += Number(element.volumetry);
                 }
             })
+
             htmlDelivery += `
             <div class="row">
-                <div>Total:</div>
+            <small style="font-size: 75%"><br>Total:</small>
             </div>
             <div class="row">
             <div class="col-2">Peso: ${weight}</div>
@@ -339,20 +351,59 @@ const listDelivery = () => {
             <div class="col-2"></div>
             </div>`
 
+            // va gerar o melhor caminho de cada um dos nodes
+            window['dijkstra'][e.origin] = dijkstra(window['vertex'], e.origin);
+            window['dijkstra'][e.destiny] = dijkstra(window['vertex'], e.destiny);
+
+            // aqui adiciona ao caminho, o node de origem para usar no calculo
+            window['dijkstra'][e.destiny][e.origin].unshift(e.destiny);
+            window['dijkstra'][e.origin][e.destiny].unshift(e.origin);
+
+            // guarda os caminhos de um nó ate outro, para ver qual é mais 'leve'
+            let path = [
+                window['dijkstra'][e.destiny][e.origin],
+                window['dijkstra'][e.origin][e.destiny]
+            ];
+
+            let pesos = [0, 0];
+
+            path[0].forEach((element, i) => {
+                let val = window['vertex'][element][path[0][i + 1]]
+                pesos[0] += Number(val ? val : 0);
+            })
+            path[1].forEach((element, i) => {
+                let val = window['vertex'][element][path[1][i + 1]]
+                pesos[1] += Number(val ? val : 0);
+            })
+            
+            if(path[0][0] != e.origin) path[0] = path[0].reverse()
+            if(path[1][1] != e.origin) path[1] = path[1].reverse()
+
+            let menorCaminho = path[0].length < path[1].length ? 0: 1;
+            let caminhoMaisLeve = pesos[0] < pesos[1] ? 0: 1;
+            let caminho = '';
+            if(caminhoMaisLeve != menorCaminho){
+                caminho += `<span>Caminho mais curto: ${path[menorCaminho].join('->')} </span> - <span> Peso: ${pesos[menorCaminho]}</span>`;
+                caminho += `<span>Caminho mais leve: ${path[caminhoMaisLeve].join('->')}</span> - <span> Peso: ${pesos[caminhoMaisLeve]}</span>`;
+            } else{
+                caminho += `<span>Melhor caminho: ${path[caminhoMaisLeve].join('->')}</span> - <span> Peso: ${pesos[caminhoMaisLeve]}</span>`;
+            }
+
             html += `
-            <div class="card">
+            <div class="card mb-3">
             <div class="card-body">
-            <div class="row">
-            <div class="col-6">Origem: ${e.origin}</div>
-                <div class="col-4">Destino: ${e.destiny}</div>
-                    <div class="col-2 text-end"> 
-                        <button index="${i}" type="button" class="remove-delivery btn btn-danger">    
-                        <i class="bi bi-trash"></i>
-                            </button>   
-                            </div>
-                        <div class="col-12"><span class="pt-1">Mercadorias:</span> <div class="card p-2">${htmlDelivery}</div></div>
+            <div class="row justify-content-between">
+                <div class="col-2">Origem: ${e.origin}</div>
+                <div class="col-2">Destino: ${e.destiny}</div>
+                <div class="col-7">${caminho}</div>
+                <div class="col-1 text-end"> 
+                    <button index="${i}" type="button" class="remove-delivery btn btn-danger">    
+                    <i class="bi bi-trash"></i>
+                        </button>   
                         </div>
-                        </div>
+                    <div class="col-12"><span class="pt-1">Mercadorias:</span> <div class="card p-2">${htmlDelivery}</div></div>
+                    </div>
+                    </div>
             </div>
             `
         }
@@ -459,10 +510,8 @@ function dijkstra(graph, source) {
             const weight = graph[vertex][neighbor];
             if (weight > 0) {
                 const newDistance = distance + weight;
-
                 if (newDistance < distances[neighbor]) {
                     distances[neighbor] = newDistance;
-                    console.log(neighbor)
                     paths[neighbor] = paths[vertex].concat(neighbor);
                     queue.push({ vertex: neighbor, distance: newDistance });
                 }
@@ -475,6 +524,7 @@ function dijkstra(graph, source) {
 
 
 const onload = function () {
+    uxCollapse();
     addVertex();
     addTrunk();
     addDelivery();
