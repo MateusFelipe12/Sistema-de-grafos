@@ -201,12 +201,13 @@ const listTrunk = () => {
     list.html(`
     <li class="list-group-item">
     <div class="row">
+    <div class="col">id</div>
     <div class="col-2">Capacidade</div>
     <div class="col-2">Altura</div>
     <div class="col-2">Largura</div>
     <div class="col-2">Comprimento</div>
     <div class="col-2">Volume</div>
-    <div class="col-2">Excluir</div>
+    <div class="col">Excluir</div>
     </div>
     </li>
     `)
@@ -215,12 +216,13 @@ const listTrunk = () => {
             list.append(`
             <li  class="list-group-item">
                 <div class="row">
+                <div class="col">#${i}</div>
                 <div class="col-2">${e.capacity}</div>
                 <div class="col-2">${e.height}</div>
                 <div class="col-2">${e.width}</div>
                 <div class="col-2">${e.depth}</div>
                 <div class="col-2">${e.volumetry}</div>
-                <div class="col-2">
+                <div class="col">
                 <button id="delete-trunk-${i}" index="${i}" class="btn btn-danger p-0 px-2" type="button" >
                 <i class="bi bi-trash"></i>
                         </button>
@@ -303,14 +305,16 @@ const listDelivery = () => {
     let list = $('#list_delivery');
     getItemStorage('delivery')
     getItemStorage('vertex')
+    getItemStorage('trunk')
 
     let html = ''
     let weight = 0;
     let height = 0;
     let width = 0;
     let depth = 0;
-    let volumetry = 0;
+    let volumetry = 0
     window['delivery'].forEach((e, i) => {
+        let volumetry = 0;
         let htmlDelivery = ''
         if (e) {
 
@@ -337,6 +341,8 @@ const listDelivery = () => {
                     volumetry += Number(element.volumetry);
                 }
             })
+            
+            let idTrunk = getBetterTrunk(e['merchandises'],i);
 
             htmlDelivery += `
             <div class="row">
@@ -352,6 +358,7 @@ const listDelivery = () => {
             </div>`
 
             // va gerar o melhor caminho de cada um dos nodes
+            if(!window['dijkstra']) window['dijkstra'] = []
             window['dijkstra'][e.origin] = dijkstra(window['vertex'], e.origin);
             window['dijkstra'][e.destiny] = dijkstra(window['vertex'], e.destiny);
 
@@ -382,11 +389,19 @@ const listDelivery = () => {
             let menorCaminho = path[0].length < path[1].length ? 0: 1;
             let caminhoMaisLeve = pesos[0] < pesos[1] ? 0: 1;
             let caminho = '';
+
             if(caminhoMaisLeve != menorCaminho){
                 caminho += `<span>Caminho mais curto: ${path[menorCaminho].join('->')} </span> - <span> Peso: ${pesos[menorCaminho]}</span>`;
                 caminho += `<span>Caminho mais leve: ${path[caminhoMaisLeve].join('->')}</span> - <span> Peso: ${pesos[caminhoMaisLeve]}</span>`;
             } else{
                 caminho += `<span>Melhor caminho: ${path[caminhoMaisLeve].join('->')}</span> - <span> Peso: ${pesos[caminhoMaisLeve]}</span>`;
+            }
+
+            let betterTrunk = '';
+            if( idTrunk && window['trunk'][idTrunk] ){
+                betterTrunk = `<span>Melhor baú: #${idTrunk}</span>`
+                window['delivery'][i].trunk = idTrunk;
+                setItemStorage('delivery')
             }
 
             html += `
@@ -395,7 +410,8 @@ const listDelivery = () => {
             <div class="row justify-content-between">
                 <div class="col-2">Origem: ${e.origin}</div>
                 <div class="col-2">Destino: ${e.destiny}</div>
-                <div class="col-7">${caminho}</div>
+                <div class="col-4">${caminho}</div>
+                ${betterTrunk != '' ? `<div class="col-2">${betterTrunk}</div>`: ''}
                 <div class="col-1 text-end"> 
                     <button index="${i}" type="button" class="remove-delivery btn btn-danger">    
                     <i class="bi bi-trash"></i>
@@ -482,7 +498,7 @@ const deleteMerchandise = () => {
     })
 }
 
-function dijkstra(graph, source) {
+const dijkstra = function (graph, source) {
     const distances = {};
     const paths = {};
     const visited = {};
@@ -522,6 +538,52 @@ function dijkstra(graph, source) {
     return paths;
 }
 
+const getBetterTrunk = (merchandises, indexMerchandise) => {
+    getItemStorage('trunk');
+    let idTrunk = 0;
+    let volumetryTotal = 0
+    let weightTotal = 0
+    let menorBau = Infinity;
+    /*
+    PRIMEIRO VEJA SE O VOLUME DE TUDO CABE EM UM BAU
+    DEPOIS,VEJA SE NENHUMA DAS MERCADORIAS É MAIS ALTA OU COMPRIDA OU MAIS LARGA QUE O BAU
+    */ 
+   
+   // PEGA O VOLUME TOTAL
+   merchandises.forEach((e, i) => {
+        volumetryTotal += e?Number(e.volumetry) : 0
+        weightTotal += e?Number(e.weight) : 0
+    })
+    // PASSA POR TODAS AS MERCADORIAS
+    merchandises.forEach((merchandise) => {
+        // PASSA POR TODOS OS BAUS
+        window['trunk'].forEach((e, i) => {
+            if( !e || ( e.used && e.used != indexMerchandise) || window['delivery'][indexMerchandise].trunk ) return false;
+            if( weightTotal > e.capacity  || volumetryTotal > e.volumetry || (!fitInTrunk(e, merchandise)) ) return false;
+            
+            if( menorBau > e.volumetry ){
+                menorBau = e.volumetry;
+                idTrunk = i;
+            }
+        })
+    })
+    
+    if( idTrunk ) {
+        window['trunk'][idTrunk].used = indexMerchandise;
+        setItemStorage('trunk');
+        return idTrunk;
+    }
+    return false;
+}
+
+const fitInTrunk = (bau, mercadoria) => {
+    return( 
+        (Number(bau.height) >= Number(mercadoria.height) && Number(bau.width) >= Number(mercadoria.width) && Number(bau.depth) >= Number(mercadoria.depth) ) ||
+        (Number(bau.height) >= Number(mercadoria.width) && Number(bau.width) >= Number(mercadoria.height) && Number(bau.depth) >= Number(mercadoria.depth) ) ||
+        (Number(bau.height) >= Number(mercadoria.height) && Number(bau.width) >= Number(mercadoria.depth) && Number(bau.depth) >= Number(mercadoria.width) ) ||
+        (Number(bau.height) >= Number(mercadoria.depth) && Number(bau.width) >= Number(mercadoria.width) && Number(bau.depth) >= Number(mercadoria.height) )
+    )
+}
 
 const onload = function () {
     uxCollapse();
