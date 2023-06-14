@@ -124,7 +124,9 @@ const listVertex = () => {
                     </a>
                 </p>
             </div>
-            <table>${htmlTr}</table>
+            <div class="table-responsive">
+                <table class="table">${htmlTr}</table>
+            </div>
         `)
 
         list.find('td[has]').on('dblclick', (e) => {
@@ -200,31 +202,31 @@ const listTrunk = () => {
     getItemStorage('trunk');
     list.html(`
     <li class="list-group-item">
-    <div class="row">
-    <div class="col">id</div>
-    <div class="col-2">Capacidade</div>
-    <div class="col-2">Altura</div>
-    <div class="col-2">Largura</div>
-    <div class="col-2">Comprimento</div>
-    <div class="col-2">Volume</div>
-    <div class="col">Excluir</div>
-    </div>
+        <div class="row flex-nowrap">
+            <div class="col">id</div>
+            <div class="col-2">Capacidade</div>
+            <div class="col-2">Altura</div>
+            <div class="col-2">Largura</div>
+            <div class="col-2">Comprimento</div>
+            <div class="col-2">Volume</div>
+            <div class="col">Excluir</div>
+        </div>
     </li>
     `)
     window['trunk'].forEach((e, i) => {
         if (e)
             list.append(`
             <li  class="list-group-item">
-                <div class="row">
-                <div class="col">#${i}</div>
-                <div class="col-2">${e.capacity}</div>
-                <div class="col-2">${e.height}</div>
-                <div class="col-2">${e.width}</div>
-                <div class="col-2">${e.depth}</div>
-                <div class="col-2">${e.volumetry}</div>
-                <div class="col">
-                <button id="delete-trunk-${i}" index="${i}" class="btn btn-danger p-0 px-2" type="button" >
-                <i class="bi bi-trash"></i>
+                <div class="row flex-nowrap">
+                    <div class="col">#${i}</div>
+                    <div class="col-2">${e.capacity}</div>
+                    <div class="col-2">${e.height}</div>
+                    <div class="col-2">${e.width}</div>
+                    <div class="col-2">${e.depth}</div>
+                    <div class="col-2">${e.volumetry}</div>
+                    <div class="col">
+                        <button id="delete-trunk-${i}" index="${i}" class="btn btn-danger p-0 px-2" type="button">
+                            <i class="bi bi-trash"></i>
                         </button>
                     </div>
                 </div>
@@ -322,16 +324,16 @@ const listDelivery = () => {
                 if (element) {
                     htmlDelivery += `
                     <div class="row">
-                    <div class="col-2">Peso: ${element.weight}</div>
-                    <div class="col-2">Altura: ${element.height}</div>
-                    <div class="col-2">Largura: ${element.width}</div>
-                    <div class="col-2">Comprimento: ${element.depth}</div>
-                    <div class="col-2">Volume: ${element.volumetry}</div>
-                    <div class="col-2">
-                    <button index="${index}_${i}" type="button" class="remove-merchandise p-0 px-1 btn btn-danger">    
-                    <i class="bi bi-trash"></i>
-                    </button>    
-                    </div>
+                        <div class="col-2">Peso: ${element.weight}</div>
+                        <div class="col-2">Altura: ${element.height}</div>
+                        <div class="col-2">Largura: ${element.width}</div>
+                        <div class="col-2">Comprimento: ${element.depth}</div>
+                        <div class="col-2">Volume: ${element.volumetry}</div>
+                        <div class="col-2">
+                            <button index="${index}_${i}" type="button" class="remove-merchandise p-0 px-1 btn btn-danger">    
+                                <i class="bi bi-trash"></i>
+                            </button>    
+                        </div>
                     </div>
                     `
                     weight += Number(element.weight);
@@ -341,24 +343,27 @@ const listDelivery = () => {
                     volumetry += Number(element.volumetry);
                 }
             })
-            
-            let idTrunk = getBetterTrunk(e['merchandises'],i);
+
+            let idTrunk = getBetterTrunk(e['merchandises'], i);
 
             htmlDelivery += `
-            <div class="row">
-            <small style="font-size: 75%"><br>Total:</small>
-            </div>
-            <div class="row">
-            <div class="col-2">Peso: ${weight}</div>
-            <div class="col-2">Altura: ${height}</div>
-            <div class="col-2">Largura: ${width}</div>
-            <div class="col-2">Comprimento: ${depth}</div>
-            <div class="col-2">Volume: ${volumetry}</div>
-            <div class="col-2"></div>
-            </div>`
+                <div class="row">
+                    <div class="col-12">
+                        <small style="font-size: 75%"><br>Total:</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">Peso: ${weight}</div>
+                    <div class="col-2">Altura: ${height}</div>
+                    <div class="col-2">Largura: ${width}</div>
+                    <div class="col-2">Comprimento: ${depth}</div>
+                    <div class="col-2">Volume: ${volumetry}</div>
+                    <div class="col-2"></div>
+                </div>
+            `;
 
             // va gerar o melhor caminho de cada um dos nodes
-            if(!window['dijkstra']) window['dijkstra'] = []
+            if (!window['dijkstra']) window['dijkstra'] = []
             window['dijkstra'][e.origin] = dijkstra(window['vertex'], e.origin);
             window['dijkstra'][e.destiny] = dijkstra(window['vertex'], e.destiny);
 
@@ -382,23 +387,23 @@ const listDelivery = () => {
                 let val = window['vertex'][element][path[1][i + 1]]
                 pesos[1] += Number(val ? val : 0);
             })
-            
-            if(path[0][0] != e.origin) path[0] = path[0].reverse()
-            if(path[1][1] != e.origin) path[1] = path[1].reverse()
 
-            let menorCaminho = path[0].length < path[1].length ? 0: 1;
-            let caminhoMaisLeve = pesos[0] < pesos[1] ? 0: 1;
+            if (path[0][0] != e.origin) path[0] = path[0].reverse()
+            if (path[1][1] != e.origin) path[1] = path[1].reverse()
+
+            let menorCaminho = path[0].length < path[1].length ? 0 : 1;
+            let caminhoMaisLeve = pesos[0] < pesos[1] ? 0 : 1;
             let caminho = '';
 
-            if(caminhoMaisLeve != menorCaminho){
+            if (caminhoMaisLeve != menorCaminho) {
                 caminho += `<span>Caminho mais curto: ${path[menorCaminho].join('->')} </span> - <span> Peso: ${pesos[menorCaminho]}</span>`;
                 caminho += `<span>Caminho mais leve: ${path[caminhoMaisLeve].join('->')}</span> - <span> Peso: ${pesos[caminhoMaisLeve]}</span>`;
-            } else{
+            } else {
                 caminho += `<span>Melhor caminho: ${path[caminhoMaisLeve].join('->')}</span> - <span> Peso: ${pesos[caminhoMaisLeve]}</span>`;
             }
 
             let betterTrunk = '';
-            if( idTrunk && window['trunk'][idTrunk] ){
+            if (idTrunk && window['trunk'][idTrunk]) {
                 betterTrunk = `<span>Melhor baú: #${idTrunk}</span>`
                 window['delivery'][i].trunk = idTrunk;
                 setItemStorage('delivery')
@@ -406,20 +411,20 @@ const listDelivery = () => {
 
             html += `
             <div class="card mb-3">
-            <div class="card-body">
-            <div class="row justify-content-between">
-                <div class="col-2">Origem: ${e.origin}</div>
-                <div class="col-2">Destino: ${e.destiny}</div>
-                <div class="col-4">${caminho}</div>
-                ${betterTrunk != '' ? `<div class="col-2">${betterTrunk}</div>`: ''}
-                <div class="col-1 text-end"> 
-                    <button index="${i}" type="button" class="remove-delivery btn btn-danger">    
-                    <i class="bi bi-trash"></i>
-                        </button>   
+                <div class="card-body">
+                    <div class="row justify-content-between">
+                        <div class="col-2">Origem: ${e.origin}</div>
+                        <div class="col-2">Destino: ${e.destiny}</div>
+                        <div class="col-4">${caminho}</div>
+                        ${betterTrunk != '' ? `<div class="col-2">${betterTrunk}</div>` : ''}
+                        <div class="col-1 text-end"> 
+                            <button index="${i}" type="button" class="remove-delivery btn btn-danger">    
+                                <i class="bi bi-trash"></i>
+                            </button>   
                         </div>
-                    <div class="col-12"><span class="pt-1">Mercadorias:</span> <div class="card p-2">${htmlDelivery}</div></div>
+                        <div class="col-12"><span class="pt-1">Mercadorias:</span> <div class="card p-2">${htmlDelivery}</div>
                     </div>
-                    </div>
+                </div>
             </div>
             `
         }
@@ -475,18 +480,18 @@ const newMerchandise = () => {
                     </div>
                     <div class="col-2">
                         <input class="form-control" type="text" placeholder="m" name="width">
-                        </div>
-                        <div class="col-2">
+                    </div>
+                    <div class="col-2">
                         <input class="form-control" type="text" placeholder="m" name="depth">
-                        </div>
-                        <div class="col-2 text-end"> 
-                    <button type="button" class="btn px-2 py-0 mb-1 btn-danger cursor-pointer delete-merchandise">
-                    <i class="bi bi-trash"></i>
-                            </button>
-                            </div>
-                        </div>
-                        </li>
-            `)
+                    </div>
+                    <div class="col-2 text-end"> 
+                        <button type="button" class="btn px-2 py-0 mb-1 btn-danger cursor-pointer delete-merchandise">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </li>
+        `)
         deleteMerchandise()
     })
 }
@@ -547,28 +552,28 @@ const getBetterTrunk = (merchandises, indexMerchandise) => {
     /*
     PRIMEIRO VEJA SE O VOLUME DE TUDO CABE EM UM BAU
     DEPOIS,VEJA SE NENHUMA DAS MERCADORIAS É MAIS ALTA OU COMPRIDA OU MAIS LARGA QUE O BAU
-    */ 
-   
-   // PEGA O VOLUME TOTAL
-   merchandises.forEach((e, i) => {
-        volumetryTotal += e?Number(e.volumetry) : 0
-        weightTotal += e?Number(e.weight) : 0
+    */
+
+    // PEGA O VOLUME TOTAL
+    merchandises.forEach((e, i) => {
+        volumetryTotal += e ? Number(e.volumetry) : 0
+        weightTotal += e ? Number(e.weight) : 0
     })
     // PASSA POR TODAS AS MERCADORIAS
     merchandises.forEach((merchandise) => {
         // PASSA POR TODOS OS BAUS
         window['trunk'].forEach((e, i) => {
-            if( !e || ( e.used && e.used != indexMerchandise) || window['delivery'][indexMerchandise].trunk ) return false;
-            if( weightTotal > e.capacity  || volumetryTotal > e.volumetry || (!fitInTrunk(e, merchandise)) ) return false;
-            
-            if( menorBau > e.volumetry ){
+            if (!e || (e.used && e.used != indexMerchandise) || window['delivery'][indexMerchandise].trunk) return false;
+            if (weightTotal > e.capacity || volumetryTotal > e.volumetry || (!fitInTrunk(e, merchandise))) return false;
+
+            if (menorBau > e.volumetry) {
                 menorBau = e.volumetry;
                 idTrunk = i;
             }
         })
     })
-    
-    if( idTrunk ) {
+
+    if (idTrunk) {
         window['trunk'][idTrunk].used = indexMerchandise;
         setItemStorage('trunk');
         return idTrunk;
@@ -577,11 +582,11 @@ const getBetterTrunk = (merchandises, indexMerchandise) => {
 }
 
 const fitInTrunk = (bau, mercadoria) => {
-    return( 
-        (Number(bau.height) >= Number(mercadoria.height) && Number(bau.width) >= Number(mercadoria.width) && Number(bau.depth) >= Number(mercadoria.depth) ) ||
-        (Number(bau.height) >= Number(mercadoria.width) && Number(bau.width) >= Number(mercadoria.height) && Number(bau.depth) >= Number(mercadoria.depth) ) ||
-        (Number(bau.height) >= Number(mercadoria.height) && Number(bau.width) >= Number(mercadoria.depth) && Number(bau.depth) >= Number(mercadoria.width) ) ||
-        (Number(bau.height) >= Number(mercadoria.depth) && Number(bau.width) >= Number(mercadoria.width) && Number(bau.depth) >= Number(mercadoria.height) )
+    return (
+        (Number(bau.height) >= Number(mercadoria.height) && Number(bau.width) >= Number(mercadoria.width) && Number(bau.depth) >= Number(mercadoria.depth)) ||
+        (Number(bau.height) >= Number(mercadoria.width) && Number(bau.width) >= Number(mercadoria.height) && Number(bau.depth) >= Number(mercadoria.depth)) ||
+        (Number(bau.height) >= Number(mercadoria.height) && Number(bau.width) >= Number(mercadoria.depth) && Number(bau.depth) >= Number(mercadoria.width)) ||
+        (Number(bau.height) >= Number(mercadoria.depth) && Number(bau.width) >= Number(mercadoria.width) && Number(bau.depth) >= Number(mercadoria.height))
     )
 }
 
@@ -599,3 +604,4 @@ const onload = function () {
 
 
 $(document).on('DOMContentLoaded', onload);
+

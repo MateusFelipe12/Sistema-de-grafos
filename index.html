@@ -15,7 +15,7 @@
 <body>
   <div class="container">
     <div class="row">
-      <div class="col-2">
+      <div class="col-lg-2 mb-3 mb-lg-0">
         <div class="list-group list-group-flush">
           <button class="list-group-item" type="button" data-bs-toggle="collapse" data-bs-target="#add_vertex"
             aria-expanded="true" aria-controls="add_vertex">
@@ -57,7 +57,7 @@
               </div>
             </form>
             <div id="list_vertex">
-              <div class="text-center" >Adicione um vertice para iniciar</div>
+              <div class="text-center">Adicione um vertice para iniciar</div>
             </div>
           </div>
           <div class="tab collapse" data-bs-parent="#collapse-forms" id="add_trunk">
@@ -99,10 +99,10 @@
                 </div>
               </div>
             </form>
-            <div id="list_trunk">
+            <div id="list_trunk" class="overflow-x-auto overflow-y-hidden">
               <ul class="list-group text-center">
                 <li class="list-group-item">
-                  <div class="row">
+                  <div class="row flex-nowrap">
                     <div class="col-2">Capacidade</div>
                     <div class="col-2">Altura</div>
                     <div class="col-2">Largura</div>
@@ -145,8 +145,9 @@
                             <div class="col-2">Altura</div>
                             <div class="col-2">Largura</div>
                             <div class="col-2">Comprimento</div>
-                            <div class="col-2 text-end"> 
-                              <button id="new-merchandise" title="Adicionar mercadoria" type="button" class="btn px-2 py-0 mb-1 btn-secondary">
+                            <div class="col-2 text-end">
+                              <button id="new-merchandise" title="Adicionar mercadoria" type="button"
+                                class="btn px-2 py-0 mb-1 btn-secondary">
                                 <i class="bi bi-plus"></i>
                               </button>
                             </div>
@@ -163,7 +164,7 @@
                 </div>
               </div>
             </form>
-            <div id="list_delivery">
+            <div id="list_delivery" class="overflow-x-auto overflow-y-hidden">
               Adicione entregas para visualiza-las
             </div>
           </div>
@@ -179,3 +180,4 @@
 </body>
 
 </html>
+
