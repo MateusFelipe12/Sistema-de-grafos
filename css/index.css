@@ -77,6 +77,11 @@ label {
     overflow-y: hidden;
 }
 
+.width-responsive{
+    min-width: 450px;
+    width: auto;
+}
+
 /* ESTILO DAS TDS DA TABELA */
 #list_vertex td,
 #list_vertex th {

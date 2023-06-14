@@ -470,7 +470,7 @@ const insertVertexSelect = () => {
 const newMerchandise = () => {
     $('#new-merchandise').click((e) => {
         $(e.target).closest('ul').append(`
-            <li class="list-group-item">
+            <li class="list-group-item width-responsive">
                 <div class="row justify-content-between align-items-center">
                     <div class="col-2">
                         <input class="form-control" type="text" placeholder="kg" name="weight">
